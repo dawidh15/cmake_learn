@@ -11,8 +11,17 @@ if($buildExists)
 
 cd .\build\
 
-#Construye el proyecto VS
-cmake ..\
+# Check if CMake is on Path
+Set-Variable -Name "isCMake" -Value ($env:Path -match "cmake")
+#TODO, if not, install cmake
 
-# Construye el software
-cmake --build .
+if($isCMake)
+  {
+  #Construye el proyecto VS
+  cmake ..\
+
+  # Construye el software
+  cmake --build .
+  } else {
+    Write-Host "CMake is not in the Path. Check whether is installed or not."
+  }
