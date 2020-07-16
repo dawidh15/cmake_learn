@@ -1,3 +1,8 @@
 // Configured options for project
 #define Tutorial_VERSION_MAJOR @Tutorial_VERSION_MAJOR@
 #define Tutorial_VERSION_MINOR @Tutorial_VERSION_MINOR@
+
+/*
+  This option defines USE_MYMATH so the header file MathFunctions.h IS USED during build.
+*/
+#cmakedefine USE_MYMATH
