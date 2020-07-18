@@ -1,3 +1,6 @@
+# Step 03. CMake tutorial
+# https://cmake.org/cmake/help/latest/guide/tutorial/index.html#adding-usage-requirements-for-library-step-3
+
 cmake_minimum_required(VERSION 3.10)
 
  # set the project name
@@ -10,7 +13,6 @@ cmake_minimum_required(VERSION 3.10)
  if(USE_MYMATH)
    add_subdirectory(MathFunctions)
    list(APPEND EXTRA_LIBS MathFunctions)
-   list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/MathFunctions")
  endif()
 
 # Add the executable
@@ -42,5 +44,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Include directories and Optional includes...
 target_include_directories(Tutorial PUBLIC
                            "${PROJECT_BINARY_DIR}"
-                           ${EXTRA_INCLUDES}
                            )

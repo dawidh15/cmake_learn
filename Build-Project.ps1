@@ -3,7 +3,8 @@ $buildExists = Test-Path .\build\
 
 if($buildExists)
 {
-  Remove-Item .\build\ -Recurse
+  Remove-Item .\build\ -Recurse -Force
+  Remove-Item .\out\ -Recurse -Force
   New-Item -Path .\build\ -Type Directory
 } else {
   New-Item -Path .\build\ -Type Directory
