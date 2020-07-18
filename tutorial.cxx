@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-#include <TutorialConfig.h>
+#include "TutorialConfig.h"
 
 #ifdef USE_MYMATH // Optional header file handling
   #include "MathFunctions.h"
