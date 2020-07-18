@@ -45,3 +45,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 target_include_directories(Tutorial PUBLIC
                            "${PROJECT_BINARY_DIR}"
                            )
+
+# Instal exe in 'bin'
+install(TARGETS Tutorial DESTINATION bin)
+
+# Install Config File
+install(FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h" DESTINATION include)

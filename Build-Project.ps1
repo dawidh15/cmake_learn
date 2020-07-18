@@ -1,13 +1,25 @@
+cd C:\localRepos\cmake_learn
 
 $buildExists = Test-Path .\build\
 
 if($buildExists)
 {
   Remove-Item .\build\ -Recurse -Force
-  Remove-Item .\out\ -Recurse -Force
   New-Item -Path .\build\ -Type Directory
 } else {
   New-Item -Path .\build\ -Type Directory
+}
+
+# Remove out folder
+if(Test-Path .\out\)
+{
+  Remove-Item .\out\ -Recurse
+}
+
+# Remove install folder
+if(Test-Path .\install\)
+{
+  Remove-Item .\install\ -Recurse
 }
 
 cd .\build\
@@ -18,11 +30,14 @@ Set-Variable -Name "isCMake" -Value ($env:Path -match "cmake")
 
 if($isCMake)
   {
-  #Construye el proyecto VS
+  # Build PROJECT (Visual Basic auto detected)
   cmake ..\
 
-  # Construye el software
+  # Build
   cmake --build .
+  cmake --install .\build\ --prefix C:\localRepos\cmake_learn\install --config debug
+
+
   } else {
     Write-Host "CMake is not in the Path. Check whether is installed or not."
   }
