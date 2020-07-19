@@ -1,12 +1,11 @@
 add_library(MathFunctions mysqrt.cxx)
 
-target_include_directories(
-	MathFunctions
-	INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# state that anybody linking to us needs to include the current source dir
+# to find MathFunctions.h, while we don't.
+target_include_directories(MathFunctions
+          INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+          )
 
-# Install lib in folder Lib
+# install rules
 install(TARGETS MathFunctions DESTINATION lib)
-
-#Install header file in 'include'
 install(FILES MathFunctions.h DESTINATION include)

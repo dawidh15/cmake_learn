@@ -35,7 +35,9 @@ if($isCMake)
 
   # Build
   cmake --build .
-  cmake --install .\build\ --prefix C:\localRepos\cmake_learn\install --config debug
+
+  # in .\build
+  cmake --install . --prefix install --config Debug
 
 
   } else {
