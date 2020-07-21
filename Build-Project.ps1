@@ -39,6 +39,10 @@ if($isCMake)
   # in .\build
   cmake --install . --prefix install --config Debug
 
+  # Run Test. See ctest --help
+  #cd .\install\bin
+  ctest -C Debug -VV
+
 
   } else {
     Write-Host "CMake is not in the Path. Check whether is installed or not."

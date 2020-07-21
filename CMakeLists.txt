@@ -35,3 +35,34 @@ install(TARGETS Tutorial DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h"
   DESTINATION include
   )
+
+#  ================== TESTING =====================
+#Rebuild the application and then cd to the binary directory and run the ctest executable: ctest -N and ctest -VV. For multi-config generators (e.g. Visual Studio), the configuration type must be specified. To run tests in Debug mode, for example, use ctest -C Debug -VV from the build directory (not the Debug subdirectory!). Alternatively, build the RUN_TESTS target from the IDE.
+
+enable_testing()
+
+# does the application run
+add_test(NAME Runs COMMAND Tutorial 25)
+
+# does the usage message work?
+add_test(NAME Usage COMMAND Tutorial)
+set_tests_properties(Usage
+  PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*number"
+  )
+
+# define a function to simplify adding tests
+function(do_test target arg result)
+  add_test(NAME Comp${arg} COMMAND ${target} ${arg})
+  set_tests_properties(Comp${arg}
+    PROPERTIES PASS_REGULAR_EXPRESSION ${result}
+    )
+endfunction(do_test)
+
+# do a bunch of result based tests
+do_test(Tutorial 4 "4 is 2")
+do_test(Tutorial 9 "9 is 3")
+do_test(Tutorial 5 "5 is 2.236")
+do_test(Tutorial 7 "7 is 2.645")
+do_test(Tutorial 25 "25 is 5")
+do_test(Tutorial -25 "-25 is [-nan|nan|0]")
+do_test(Tutorial 0.0001 "0.0001 is 0.01")
