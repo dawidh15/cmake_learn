@@ -22,6 +22,7 @@ endif()
 
 # add the executable
 add_executable(Tutorial tutorial.cxx)
+add_executable(Prueba pruebas.cxx)
 target_link_libraries(Tutorial PUBLIC ${EXTRA_LIBS})
 
 # add the binary tree to the search path for include files
@@ -57,12 +58,13 @@ function(do_test target arg result)
     PROPERTIES PASS_REGULAR_EXPRESSION ${result}
     )
 endfunction(do_test)
+# in PASS_REGULAR_EXPRESSION, the output must match the regex
 
 # do a bunch of result based tests
-do_test(Tutorial 4 "4 is 2")
-do_test(Tutorial 9 "9 is 3")
 do_test(Tutorial 5 "5 is 2.236")
-do_test(Tutorial 7 "7 is 2.645")
 do_test(Tutorial 25 "25 is 5")
 do_test(Tutorial -25 "-25 is [-nan|nan|0]")
 do_test(Tutorial 0.0001 "0.0001 is 0.01")
+
+do_test(Prueba 1 "passed")
+do_test(Prueba 100 "failed")
