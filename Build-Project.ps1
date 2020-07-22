@@ -36,13 +36,18 @@ if($isCMake)
   # Build
   cmake --build .
 
-  # in .\build
+  # install in .\build
   cmake --install . --prefix install --config Debug
 
   # Run Test. See ctest --help
   #cd .\install\bin
   ctest -C Debug -VV
 
+  # Create Installer and source distribution (--config ...)
+  # cpack -G ZIP -C Debug --config CPackSourceConfig.cmake
+
+  # Create installer only
+  cpack -G ZIP -C Debug
 
   } else {
     Write-Host "CMake is not in the Path. Check whether is installed or not."
