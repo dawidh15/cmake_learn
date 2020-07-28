@@ -1,15 +1,17 @@
-add_library(
-MathFunctions
-mysqrt.cxx
-${CMAKE_CURRENT_BINARY_DIR}/Table.h
-)
+add_library(MathFunctions MathFunctions.cxx)
 
 # state that anybody linking to us needs to include the current source dir
 # to find MathFunctions.h, while we don't.
 target_include_directories(MathFunctions
           INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
-          PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
           )
+
+# Should we use our own math functions.
+option(USE_MYMATH "Use tutorial provided math implementation" ON)
+
+if(USE_MYMATH)
+
+  target_compile_definitions(MathFunctions PRIVATE "USE_MYMATH")
 
 # ================== Make table of values ====================
   # Create exe to construct Table
@@ -22,36 +24,35 @@ add_custom_command(
   COMMAND MakeTable ${CMAKE_CURRENT_BINARY_DIR}/Table.h
   DEPENDS MakeTable
 )
-
 #=============================================================
 
+# State that we depend on our binary dir to find Table.h
+add_library(SqrtLibrary STATIC
+  mysqrt.cxx
+  ${CMAKE_CURRENT_BINARY_DIR}/Table.h
+)
 
-# ========= System introspection Check for features in system ===========
-# # If the platform has log and exp then we will use them to compute the square root in the mysqrt function. We first test for the availability of these functions using the CheckSymbolExists module in the top-level CMakeLists.txt. On some platforms, we will need to link to the m library. If log and exp are not initially found, require the m library and try again.
-#
-# # <check_symbol_exists(<symbol> <files> <variable>)> Check that the <symbol> is available after including given header <files> and store the result in a <variable>. Specify the list of files in one argument as a semicolon-separated list. <variable> will be created as an internal cache variable.
-# # consider include(CheckCXXSymbolExists), check_cxx_symbol_exists for C++
-# include(CheckSymbolExists)
-# check_symbol_exists(log "math.h" HAVE_LOG)
-# check_symbol_exists(exp "math.h" HAVE_EXP)
-# if(NOT (HAVE_LOG AND HAVE_EXP))
-#   unset(HAVE_LOG CACHE)
-#   unset(HAVE_EXP CACHE)
-#   set(CMAKE_REQUIRED_LIBRARIES "m")
-#   check_symbol_exists(log "math.h" HAVE_LOG)
-#   check_symbol_exists(exp "math.h" HAVE_EXP)
-#   if( HAVE_LOG AND HAVE_EXP )
-#     target_link_libraries(MathFunctions PRIVATE m)
-#   endif()
-# endif()
-#
-# # add compile definitions
-# if(HAVE_LOG AND HAVE_EXP)
-#   target_compile_definitions(MathFunctions
-#                              PRIVATE "HAVE_LOG" "HAVE_EXP")
-# endif()
+
+# Library that just make the sqrt
+target_include_directories(SqrtLibrary PRIVATE
+${CMAKE_CURRENT_BINARY_DIR}
+)
+
+# state that SqrtLibrary need PIC when the default is shared libraries
+ set_target_properties(SqrtLibrary PROPERTIES
+                       POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS}
+                       )
+#MathFunctions target depends on SqrtLibrary
+target_link_libraries(MathFunctions PRIVATE SqrtLibrary)
+
+endif()
+
+# define the symbol stating we are using the declspec(dllexport) when
+# building on windows
+target_compile_definitions(MathFunctions PRIVATE "EXPORTING_MYMATH")
 
 # install rules
-install(TARGETS MathFunctions DESTINATION lib)
+#install(TARGETS MathFunctions DESTINATION lib)
+install(TARGETS MathFunctions DESTINATION bin)
 install(FILES MathFunctions.h DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Table.h DESTINATION include)

@@ -1,13 +1,18 @@
 #include <iostream>
-#include <Table.h>
+#include "Table.h"
 #include "MathFunctions.h"
 
 // a hack square root calculation using simple operations
+namespace mathfunctions{
+  namespace detail{
+
 double mysqrt(double x)
 {
   if (x <= 0) {
     return 0;
   }
+
+  // Use the table to find init value
     double result = x;
   if (1 <= x && x < 10)
   {
@@ -25,3 +30,5 @@ double mysqrt(double x)
   }
   return result;
 }
+} //namespace detail
+}// mathfunctions namespace
