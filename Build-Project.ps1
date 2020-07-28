@@ -30,24 +30,34 @@ Set-Variable -Name "isCMake" -Value ($env:Path -match "cmake")
 
 if($isCMake)
   {
+
+    ## Test the Dashboard test support
+    ctest [-VV] -C Debug -D Experimental
+    # Go to dashboard
+    $Browser=new-object -com internetexplorer.application
+
+    $Browser.navigate2("https://my.cdash.org/index.php?project=CMakeTutorial")
+
+    $Browser.visible=$true
+
   # Build PROJECT (Visual Basic auto detected)
-  cmake ..\
+  #cmake ..\
 
   # Build
-  cmake --build .
+  #cmake --build .
 
   # install in .\build
-  cmake --install . --prefix install --config Debug
+#  cmake --install . --prefix install --config Debug
 
   # Run Test. See ctest --help
   #cd .\install\bin
-  ctest -C Debug -VV
+  #ctest -C Debug -VV
 
   # Create Installer and source distribution (--config ...)
   # cpack -G ZIP -C Debug --config CPackSourceConfig.cmake
 
   # Create installer only
-  cpack -G ZIP -C Debug
+  #cpack -G ZIP -C Debug
 
   } else {
     Write-Host "CMake is not in the Path. Check whether is installed or not."

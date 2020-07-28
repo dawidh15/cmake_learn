@@ -40,7 +40,14 @@ install(FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h"
 #  ================== TESTING =====================
 #Rebuild the application and then cd to the binary directory and run the ctest executable: ctest -N and ctest -VV. For multi-config generators (e.g. Visual Studio), the configuration type must be specified. To run tests in Debug mode, for example, use ctest -C Debug -VV from the build directory (not the Debug subdirectory!). Alternatively, build the RUN_TESTS target from the IDE.
 
-enable_testing()
+#enable_testing()
+
+# =========== dashboard for testing ============
+# Export test results to dashboard (Step 08)
+# CTest will call enable_testing
+# See CTestConfig.cmake file
+include(CTest)
+# ==============================================
 
 # does the application run
 add_test(NAME Runs COMMAND Tutorial 25)
