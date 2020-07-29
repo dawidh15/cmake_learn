@@ -2,10 +2,14 @@ add_library(MathFunctions MathFunctions.cxx)
 
 # state that anybody linking to us needs to include the current source dir
 # to find MathFunctions.h, while we don't.
+# ============= Step 11 Export ========================
 target_include_directories(MathFunctions
-          INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
-          )
-
+                           INTERFACE
+                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                            $<INSTALL_INTERFACE:include>
+                           )
+# Use gen expr to use paths that will be valid in other machines.
+# =========================================================================
 # Should we use our own math functions.
 option(USE_MYMATH "Use tutorial provided math implementation" ON)
 
@@ -53,6 +57,17 @@ target_compile_definitions(MathFunctions PRIVATE "EXPORTING_MYMATH")
 
 # install rules
 #install(TARGETS MathFunctions DESTINATION lib)
-install(TARGETS MathFunctions DESTINATION bin)
+# ============= Step 11 Export =============
+install(TARGETS MathFunctions tutorial_compiler_flags
+        DESTINATION lib
+        EXPORT MathFunctionsTargets)
+install(EXPORT MathFunctionsTargets
+  FILE MathFunctionsTargets.cmake
+  DESTINATION lib/cmake/MathFunctions
+)
+# ==============================================
 install(FILES MathFunctions.h DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Table.h DESTINATION include)
+include(GNUInstallDirs) #contains GNUInstallDirs Variabl (CMAKE_INSTALL_BINDIR)
+install(FILES ${PROJECT_BINARY_DIR}/$<CONFIG>/MathFunctions.dll
+DESTINATION bin)

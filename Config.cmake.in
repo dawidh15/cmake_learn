@@ -1,0 +1,4 @@
+# At this point, we have CMake properly packaging the target information that is required but we will still need to generate a MathFunctionsConfig.cmake so that the CMake find_package() command can find our project. So let’s go ahead and add a new file to the top-level of the project called Config.cmake.in with the following contents
+@PACKAGE_INIT@
+
+include ( "${CMAKE_CURRENT_LIST_DIR}/MathFunctionsTargets.cmake" )
