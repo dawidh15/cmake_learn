@@ -3,16 +3,28 @@ cmake_minimum_required(VERSION 3.10)
 # set the project name and version
 project(Tutorial VERSION 1.0)
 
-# specify the C++ standard
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+# ======== Step 10 Generating expressions ================================
+# Create an interface library to specify the standard
+add_library(tutorial_compiler_flags INTERFACE)
+target_compile_features(tutorial_compiler_flags INTERFACE cxx_std_11)
 
+# Add warning levels depending on tutorial_compiler_flags
+set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU>")
+set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
+target_compile_options(tutorial_compiler_flags INTERFACE
+  "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
+  "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
+)
+# ===================================================================
+
+# ============  Step 09 Mixing shared and dynamic libraries ==========
 # Control where the static and shared libraries are buid. So, in Windows we don't need to tinker with the path to run the executable.
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+#=============================================================
 
 # configure a header file to pass some of the CMake settings
 # to the source code
